@@ -70,7 +70,7 @@ Due to rapid detection and immediate endpoint network isolation, **no lateral mo
 
 ## 4. ⏱️ Detailed Chronological Incident Timeline
 
-```mermaid
+<!-- ```mermaid
 flowchart TD
     A["22:59:00 IST<br/>Password spraying begins<br/>Source: 185.220.101.5<br/>24 Event ID 4625 failures"]
     B["23:01:15 IST<br/>Successful authentication<br/>Account: CORP\finance_svc<br/>Event ID 4624"]
@@ -87,7 +87,7 @@ flowchart TD
     M["00:15:00 IST<br/>CLOSURE<br/>Forensic scan reported clean<br/>Ticket marked Solved"]
 
     A --> B --> C --> D --> E --> F --> G --> H --> I --> J --> K --> L --> M
-```
+``` -->
 
 
 | Timestamp (IST) | Source / Component | Event ID / Log Type | Event Description & Analyst Observations |
