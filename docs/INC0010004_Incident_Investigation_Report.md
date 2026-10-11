@@ -15,7 +15,7 @@
 | **Investigation Date** | October 9, 2026 |
 | **Incident Lead Investigator** | SOC Tier 2 Analyst / Incident Handler |
 | **Escalation Management** | SOC Manager & CSIRT Incident Commander |
-| **Primary Affected Host** | `CORP-WORKSTATION01` (`192.168.178.128`) - Finance Department |
+| **Primary Affected Host** | `CORP-WORKSTATION01` (`192.168.XX.XX`) - Finance Department |
 | **Compromised Account** | `CORP\finance_svc` (Service Account with Local Administrator rights) |
 | **Attacker Infrastructure** | `185.220.101.5` (Known Tor Exit / Malicious C2 Node) |
 
@@ -98,7 +98,7 @@ timeline
 | **23:08:10** | Suricata NIDS | `alert (eve.json)` | Rule `ET USER_AGENTS CobaltStrike/4.5` triggered outbound to destination IP `185.220.101.5`. |
 | **23:09:20** | Sysmon EDR | `EventCode 10` | `rundll32.exe` requested `GrantedAccess: 0x1fffff` (Full Access) into `C:\Windows\System32\lsass.exe` using `comsvcs.dll, MiniDump` writing to `C:\Users\Public\lsass.dmp`. |
 | **23:10:00** | Splunk Enterprise | Correlation Alert | `[CRITICAL] Multi-Stage Intrusion Correlation Rule` triggered across host, EDR, and NIDS data sources. |
-| **23:14:00** | ServiceNow ITSM | `INC0010942` | Ticket auto-created and assigned to SOC L2 Analyst. Triage initiated within SLA. |
+| **23:14:00** | ServiceNow ITSM | `INC0010004` | Ticket auto-created and assigned to SOC L2 Analyst. Triage initiated within SLA. |
 | **23:32:00** | SOC Containment | EDR Isolation | Workstation `CORP-WORKSTATION01` placed in network quarantine. |
 | **23:38:00** | SOC Containment | Active Directory | Account `CORP\finance_svc` disabled; Kerberos Ticket-Granting Tickets (TGT) purged. |
 | **23:45:00** | SOC Eradication | Endpoint Forensic | Dropped files (`Invoice_Q3.pdf.exe`, `update.exe`, `lsass.dmp`) deleted; persistence checks negative. |
