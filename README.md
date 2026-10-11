@@ -204,9 +204,9 @@ The flagship correlation rule aggregates Windows Event Logs, Sysmon telemetry, a
 | sort _time
 ```
 
-| Unified Kill Chain Correlation View |
-| :---: |
-| ![Splunk Unified Correlation View](assets/screenshots/06_correlation_dashboard/1.png) |
+| Unified Kill Chain Correlation View | Splunk Dark-Mode SOC Operations Dashboard |
+| :---: | :---: |
+| ![Splunk Unified Correlation View](assets/screenshots/06_correlation_dashboard/1.png) | ![Splunk Dashboard](assets/screenshots/06_correlation_dashboard/dashboard-1.png) |
 
 ---
 
