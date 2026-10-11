@@ -70,7 +70,7 @@ Due to rapid detection and immediate endpoint network isolation, **no lateral mo
 
 ## 4. ⏱️ Detailed Chronological Incident Timeline
 
-```mermaid
+
 timeline
     title Incident INC0010004 Attack & Response Timeline (IST)
     22:59:00 : Password spraying begins from 185.220.101.5 (24 Event 4625s)
@@ -86,7 +86,7 @@ timeline
     23:45:00 : ERADICATION: Malicious binaries and dumps quarantined & deleted
     23:58:00 : RECOVERY: Perimeter firewall block pushed for 185.220.101.5/32
     00:15:00 : CLOSURE: Post-incident forensic scan clean; Ticket marked Solved
-```
+
 
 | Timestamp (IST) | Source / Component | Event ID / Log Type | Event Description & Analyst Observations |
 | :--- | :--- | :--- | :--- |
