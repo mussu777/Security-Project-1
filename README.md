@@ -43,7 +43,7 @@ The objective was to simulate a multi-stage cyber intrusion against an enterpris
 | Component | Role | Details |
 | :--- | :--- | :--- |
 | **Physical Host** | SIEM Server | Splunk Enterprise (Web UI: `8000`, Forwarder Ingestion: `9997`) |
-| **VMware Target VM** | Endpoint Asset | Windows 10 Enterprise (`192.168.178.128`) - Hostname: `CORP-WORKSTATION01` |
+| **VMware Target VM** | Endpoint Asset | Windows 10 Enterprise (`192.168.XX.XX`) - Hostname: `CORP-WORKSTATION01` |
 | **Sysmon 64** | Endpoint Telemetry | Modular configuration for deep process, file, and memory tracking |
 | **Suricata 7.0** | Network Sensor | Emerging Threats (ET Open) ruleset monitoring NAT traffic (`eve.json`) |
 | **Splunk Universal Forwarder** | Ingestion Pipeline | Multi-channel inputs forwarding to dedicated indices |
@@ -215,7 +215,7 @@ The flagship correlation rule aggregates Windows Event Logs, Sysmon telemetry, a
 | Indicator Type | Observable | Context & Threat Intelligence Result |
 | :--- | :--- | :--- |
 | **External IPv4** | `185.220.101.5` | AbuseIPDB: **100% Confidence of Abuse** (Malicious C2 / Tor Exit) |
-| **Target Host** | `CORP-WORKSTATION01` (`192.168.178.128`) | Compromised Finance Department Workstation |
+| **Target Host** | `CORP-WORKSTATION01` (`192.168.XX.XX`) | Compromised Finance Department Workstation |
 | **Compromised Account** | `CORP\finance_svc` | Privileged Service Account |
 | **Phishing Executable** | `C:\Users\Public\Downloads\Invoice_Q3.pdf.exe` | Double-extension disguised binary |
 | **Dropped Payload** | `C:\Users\Public\update.exe` | Staged binary via hidden PowerShell cradle |
