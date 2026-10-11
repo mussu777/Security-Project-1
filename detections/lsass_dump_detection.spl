@@ -1,0 +1,29 @@
+```
+===================================================================
+Detection Name: LSASS Memory Access & Credential Dumping
+Author: SOC Team
+Data Source: index=edr_sysmon (Sysmon Operational Event Logs)
+Event ID: 10 (ProcessAccess)
+Target Image: *\lsass.exe
+Granted Access Masks:
+  - 0x1010 (PROCESS_VM_READ | PROCESS_QUERY_LIMITED_INFORMATION)
+  - 0x1410 (PROCESS_VM_READ | PROCESS_QUERY_INFORMATION)
+  - 0x1fffff (PROCESS_ALL_ACCESS)
+MITRE ATT&CK: T1003 (OS Credential Dumping: LSASS Memory)
+Severity: Critical
+Common Attacker Tools: 
+  - rundll32.exe comsvcs.dll, MiniDump
+  - procdump.exe
+  - mimikatz.exe / sekurlsa::logonpasswords
+Recommended Action:
+  1. Immediately isolate host from network via EDR/firewall.
+  2. Terminate attacking source process (SourceImage / PID).
+  3. Assume all cached credentials on the asset are compromised.
+  4. Initiate enterprise credential rotation and Kerberos TGT purge.
+===================================================================
+```
+index=edr_sysmon EventCode=10 TargetImage="*\\lsass.exe" GrantedAccess IN ("0x1010", "0x1410", "0x1fffff")
+| eval Attacking_Process=SourceImage
+| eval Target=TargetImage
+| table _time, host, SourceImage, TargetImage, GrantedAccess, CallTrace
+| sort - _time

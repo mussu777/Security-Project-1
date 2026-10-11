@@ -1,0 +1,24 @@
+```
+===================================================================
+Detection Name: Password Spraying & Brute Force Detection
+Author: SOC Team
+Data Source: index=wineventlog (Windows Security Event Logs)
+Event ID: 4625 (An account failed to log on)
+MITRE ATT&CK: T1110 (Brute Force / Password Spraying)
+Severity: High
+Threshold: 10 or more failed logon attempts from the same source IP 
+           or against multiple targets within a 15-minute window
+False Positives: 
+  - Misconfigured service accounts with expired passwords
+  - Vulnerability scanners / authorized penetration tests
+Recommended Action:
+  1. Correlate with subsequent Event 4624 (Logon Type 3) to identify 
+     if the attacker successfully authenticated.
+  2. Inspect source IP on threat intelligence (AbuseIPDB, VirusTotal).
+  3. If external or untrusted source, enforce temporary IP block on firewall.
+===================================================================
+```
+index=wineventlog EventCode=4625 
+| stats count by src_ip, TargetUserName 
+| where count >= 10
+| sort - count

@@ -1,0 +1,17 @@
+```
+===================================================================
+Detection Name: Obfuscated PowerShell Download Cradle
+Author: SOC Team
+Data Source: index=edr_sysmon (Sysmon Operational Event Logs)
+Event ID: 1 (ProcessCreate)
+MITRE ATT&CK: T1059 (Command and Scripting Interpreter: PowerShell)
+Severity: High
+Description: Detects PowerShell executions containing download cradle 
+             methods (Invoke-WebRequest, DownloadString, Net.WebClient)
+             often launched with stealth flags (-W Hidden, -NonI, -NoP).
+===================================================================
+```
+index=edr_sysmon EventCode=1 (Image="*\\powershell.exe" OR Image="*\\pwsh.exe") 
+(CommandLine="*Invoke-WebRequest*" OR CommandLine="*DownloadString*" OR CommandLine="*Net.WebClient*" OR CommandLine="*-W Hidden*")
+| table _time, host, User, ParentImage, CommandLine
+| sort - _time

@@ -268,9 +268,13 @@ Incident **`INC0010004`** was escalated directly to Tier 2 Incident Response und
 ├── 📁 detections/                        <-- Saved SPL detection searches (.spl files)
 │   ├── multi_stage_correlation.spl
 │   ├── brute_force_detection.spl
-│   └── lsass_dump_detection.spl
+│   ├── lsass_dump_detection.spl
+│   ├── phishing_attachment_detection.spl
+│   ├── powershell_cradle_detection.spl
+│   └── suricata_nids_detection.spl
 └── 📁 docs/                              <-- In-depth incident reports & writeups
-    └── INC0010004_Incident_Investigation_Report.md
+    ├── INC0010004_Incident_Investigation_Report.md
+    └── soc_lab_master_step_by_step_guide.md
 
 ```
 

@@ -1,0 +1,37 @@
+```
+===================================================================
+Detection Name: Multi-Stage Cyber Kill Chain Correlation Search
+Author: SOC Team
+Target Asset: Enterprise Workstations & Servers
+Data Sources: 
+  - index=wineventlog (Windows Security Event Logs)
+  - index=edr_sysmon (Sysmon Process, File, and ProcessAccess Telemetry)
+  - index=ids_suricata (Suricata Network Intrusion Detection Alerts)
+MITRE ATT&CK: 
+  - T1110 (Brute Force / Password Spraying)
+  - T1566 (Phishing / Double Extension Execution)
+  - T1059 (PowerShell Download Cradle)
+  - T1003 (OS Credential Dumping: LSASS Memory)
+  - T1071 (Application Layer Protocol: C2 Beaconing)
+Severity: Critical
+Threshold: Consolidated correlation across 2 or more distinct attack stages
+Recommended Action:
+  1. Trigger immediate P1 Incident escalation in ServiceNow (INC0010004).
+  2. Network isolate affected endpoint (CORP-WORKSTATION01).
+  3. Revoke compromised account credentials (CORP\finance_svc).
+===================================================================
+```
+(index=wineventlog EventCode IN (4625, 4624)) OR 
+(index=edr_sysmon EventCode IN (1, 10, 11)) OR 
+(index=ids_suricata event_type=alert)
+| eval Incident_Stage=case(
+    EventCode=="4625", "1. Brute Force Attempt (T1110)",
+    EventCode=="4624", "2. Successful Authentication",
+    (EventCode=="1" OR EventCode=="11") AND (TargetFilename LIKE "%Invoice_Q3%" OR Image LIKE "%Invoice_Q3%"), "3. Spearphishing Attachment Execution (T1566)",
+    EventCode=="1" AND (CommandLine LIKE "%powershell%" OR CommandLine LIKE "%Invoke-%"), "4. Suspicious PowerShell Cradle (T1059)",
+    EventCode=="10" AND TargetImage LIKE "%lsass.exe", "5. LSASS Credential Dump (T1003)",
+    event_type=="alert", "6. Suricata Network IDS C2 Alert (T1071)"
+)
+| where isnotnull(Incident_Stage)
+| table _time, host, Incident_Stage, TargetUserName, Image, CommandLine, TargetFilename, "alert.signature", src_ip, dest_ip
+| sort _time

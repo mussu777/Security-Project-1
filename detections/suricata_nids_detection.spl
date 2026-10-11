@@ -1,0 +1,15 @@
+```
+===================================================================
+Detection Name: Suricata Network Intrusion Detection Alerts
+Author: SOC Team
+Data Source: index=ids_suricata (eve.json alerts)
+MITRE ATT&CK: T1071 (Application Layer Protocol: C2 Beaconing)
+Severity: High
+Description: Ingests real-time alerts from Suricata IDS, identifying 
+             malware communication, trojan beacons (e.g. Cobalt Strike),
+             and suspicious outbound traffic.
+===================================================================
+```
+index=ids_suricata event_type=alert
+| table _time, alert.signature, alert.category, alert.severity, src_ip, dest_ip, dest_port
+| sort - _time

@@ -1,0 +1,16 @@
+```
+===================================================================
+Detection Name: Double-Extension Phishing Payload Execution
+Author: SOC Team
+Data Source: index=edr_sysmon (Sysmon Operational Event Logs)
+Event IDs: 1 (ProcessCreate), 11 (FileCreate)
+MITRE ATT&CK: T1566 (Phishing / Spearphishing Attachment)
+Severity: High
+Description: Identifies creation and execution of files disguised 
+             with double extensions (e.g., .pdf.exe, .docx.exe, .xlsx.exe)
+             commonly delivered via email phishing.
+===================================================================
+```
+index=edr_sysmon (EventCode=1 OR EventCode=11) (Image="*.pdf.exe" OR TargetFilename="*.pdf.exe")
+| table _time, host, User, Image, CommandLine, TargetFilename
+| sort - _time
