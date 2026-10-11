@@ -1,6 +1,6 @@
-# Enterprise SOC Lab: Complete End-to-End Implementation Master Guide
+# Enterprise SOC Lab: Complete End-to-End Implementation Master Guide with AI
 
-This guide provides every single step to build your ** SOC Monitoring & Incident Response Lab** using a safe **Hybrid Setup** (Splunk on Host PC + Windows/Suricata Target VM in VMware + ServiceNow Developer Cloud).
+This guide provides every single step to build your ** SOC Monitoring & Incident Response Lab** using a safe **Hybrid Setup** (Splunk on Host PC + Windows/Suricata Target VM in VMware + ServiceNow Developer Cloud + AI Tools).
 
 ---
 
@@ -74,7 +74,7 @@ flowchart TD
    ```powershell
    ipconfig
    ```
-2. Look for the **VMware Network Adapter VMnet8** (NAT) IPv4 address (e.g., `192.168.XX.XX` or `192.168.XX.XX`). Keep this IP handy.
+2. Look for the **VMware Network Adapter VMnet8** (NAT) IPv4 address (e.g., `192.168.158.158` or `192.168.158.186`). Keep this IP handy.
 
 ---
 
@@ -158,10 +158,10 @@ flowchart TD
    ```powershell
    cd "C:\Program Files\Suricata"
 
-   # Start Suricata monitoring your VM IP (e.g., 192.168.XX.XX):
+   # Start Suricata monitoring your VM IP (e.g., 192.168.158.186):
    .\suricata.exe -c suricata.yaml -i <YOUR_VM_IP> -l "C:\Program Files\Suricata\log"
    ```
-   *(Note: On Windows, `-i` requires your VM's IPv4 address or Npcap device GUID, e.g. `-i 192.168.XX.XX`).*
+   *(Note: On Windows, `-i` requires your VM's IPv4 address or Npcap device GUID, e.g. `-i 192.168.158.186`).*
 
 ---
 
@@ -234,7 +234,7 @@ flowchart TD
 
 Execute this chain inside the VM to generate authentic multi-stage threat logs:
 
-### 🔴 Stage 1: Brute Force / Password Spraying (`MITRE T1110.001`)
+### 🔴 Stage 1: Brute Force / Password Spraying (`MITRE T1110`)
 ```powershell
 $users = @("mscott", "bwayne", "dharvey", "finance_svc", "hr_backup", "jsmith", "clark.kent", "administrator")
 foreach ($user in $users) {
@@ -249,7 +249,7 @@ net use \\127.0.0.1\IPC$ /user:CORP\finance_svc "Finance2026!!"
 
 ---
 
-### 🔴 Stage 2: Phishing Execution Simulation (`MITRE T1566.001`)
+### 🔴 Stage 2: Phishing Execution Simulation (`MITRE T1566`)
 Simulate a user executing a weaponized invoice attachment (`Invoice_Q3.pdf.exe` disguised with double extension), triggering file creation (Event ID 11) and process execution with discovery (Event ID 1 / 4688):
 
 ```powershell
@@ -269,7 +269,7 @@ Start-Process -FilePath "C:\Users\Public\Downloads\Invoice_Q3.pdf.exe" -Argument
 
 ---
 
-### 🔴 Stage 3: PowerShell Download Cradle & Execution (`MITRE T1059.001`)
+### 🔴 Stage 3: PowerShell Download Cradle & Execution (`MITRE T1059`)
 Attacker uses PowerShell to fetch secondary payload from C2:
 ```powershell
 # 1. Execute Download Cradle (Hidden PowerShell fetching remote payload)
@@ -290,7 +290,7 @@ Test-Path "C:\Users\Public\update.exe"
 
 ---
 
-### 🔴 Stage 4: Network IDS Alert & LSASS Memory Access (`MITRE T1071` & `T1003.001`)
+### 🔴 Stage 4: Network IDS Alert & LSASS Memory Access (`MITRE T1071` & `T1003`)
 Attacker triggers C2 beacon network communication and dumps LSASS memory for credentials:
 ```powershell
 # 1. Triggers Suricata ET USER_AGENTS / Malware C2 Alert
@@ -334,15 +334,15 @@ In Splunk Web (`Search & Reporting`), build and save these correlation rules:
 
 | Detection Name | SPL Search Query | MITRE Technique | Severity |
 | :--- | :--- | :--- | :--- |
-| **Password Spray Detection** | `index=wineventlog EventCode=4625 \| stats count by src_ip, TargetUserName \| where count >= 10` | `T1110.001` | **High** |
-| **Double-Extension Phishing Payload** | `index=edr_sysmon (EventCode=1 OR EventCode=11) (Image="*.pdf.exe" OR TargetFilename="*.pdf.exe")` | `T1566.001` | **High** |
-| **PowerShell Download Cradle** | `index=edr_sysmon EventCode=1 Image="*\\powershell.exe" CommandLine="*Invoke-WebRequest*" OR CommandLine="*DownloadString*"` | `T1059.001` | **High** |
-| **LSASS Memory Dumping** | `index=edr_sysmon EventCode=10 TargetImage="*\\lsass.exe" GrantedAccess IN ("0x1010", "0x1410", "0x1fffff")` | `T1003.001` | **Critical** |
+| **Password Spray Detection** | `index=wineventlog EventCode=4625 \| stats count by src_ip, TargetUserName \| where count >= 10` | `T1110` | **High** |
+| **Double-Extension Phishing Payload** | `index=edr_sysmon (EventCode=1 OR EventCode=11) (Image="*.pdf.exe" OR TargetFilename="*.pdf.exe")` | `T1566` | **High** |
+| **PowerShell Download Cradle** | `index=edr_sysmon EventCode=1 Image="*\\powershell.exe" CommandLine="*Invoke-WebRequest*" OR CommandLine="*DownloadString*"` | `T1059` | **High** |
+| **LSASS Memory Dumping** | `index=edr_sysmon EventCode=10 TargetImage="*\\lsass.exe" GrantedAccess IN ("0x1010", "0x1410", "0x1fffff")` | `T1003` | **Critical** |
 | **Suricata Network Intrusion** | `index=ids_suricata event_type=alert \| table _time, alert.signature, alert.category, src_ip, dest_ip` | `T1071 / T1190` | **High** |
 
 ---
 
-## Step 5: SOC L1/L2 Alert Triage & IoC Extraction Workflow
+## Step 5: SOC Analyst Alert Triage & IoC Extraction Workflow
 
 ### 5.1 Triage Assessment (True Positive Confirmation)
 1. **Initial Trigger:** Splunk fires alert `[CRITICAL] Multi-Stage Attack: Brute Force -> Phishing Payload -> PowerShell -> LSASS Dump`.
@@ -364,7 +364,7 @@ In Splunk Web (`Search & Reporting`), build and save these correlation rules:
 | **Attacker IPv4** | `185.220.101.5` | AbuseIPDB Score: **100% Malicious** (Known Tor Exit / C2 Node). |
 | **Target Host** | `CORP-WORKSTATION01` (`192.168.XX.XX`) | Windows 10 Finance Workstation. |
 | **Compromised Account** | `CORP\finance_svc` | Domain Service Account (Elevated Privileges). |
-| **Phishing Attachment** | `C:\Users\Public\Downloads\Invoice_Q3.pdf.exe` | Double extension disguised executable (`T1566.001`). |
+| **Phishing Attachment** | `C:\Users\Public\Downloads\Invoice_Q3.pdf.exe` | Double extension disguised executable (`T1566`). |
 | **Malicious File Path** | `C:\Users\Public\update.exe` | Unsigned binary dropped in public writable directory. |
 | **Dump Artifact** | `C:\Users\Public\lsass.dmp` | Forensic artifact containing credential hashes. |
 | **User-Agent** | `CobaltStrike/4.5` | Known Adversary Emulation / C2 Framework. |
@@ -374,12 +374,12 @@ In Splunk Web (`Search & Reporting`), build and save these correlation rules:
 ### 5.3 MITRE ATT&CK Framework Mapping
 
 ```
-[Initial Access]          T1110.001 - Password Spraying
-[Initial Access]          T1566.001 - Spearphishing Attachment (Invoice_Q3.pdf.exe)
-[Execution]               T1059.001 - PowerShell Command and Scripting Interpreter
+[Initial Access]          T1110 - Password Spraying
+[Initial Access]          T1566 - Spearphishing Attachment (Invoice_Q3.pdf.exe)
+[Execution]               T1059 - PowerShell Command and Scripting Interpreter
 [Defense Evasion]         T1027     - Obfuscated Files or Information
-[Credential Access]       T1003.001 - OS Credential Dumping: LSASS Memory
-[Command and Control]     T1071.001 - Web Protocols (C2 Beaconing)
+[Credential Access]       T1003 - OS Credential Dumping: LSASS Memory
+[Command and Control]     T1071 - Web Protocols (C2 Beaconing)
 ```
 
 ---
@@ -428,9 +428,9 @@ Work Notes (Incident Timeline & Containment Actions):
 Save this professional Incident Report in your project portfolio:
 
 ```markdown
-# INCIDENT INVESTIGATION REPORT: INC0010942
+# INCIDENT INVESTIGATION REPORT: INC0010004
 **Incident Title:** Multi-Stage Endpoint Intrusion & Credential Harvesting  
-**Date/Time:** 2026-10-06 19:30:00 UTC – 20:45:00 UTC  
+**Date/Time:** 2026-10-09 22:59:00 IST – 23:45:00 IST  
 **Severity Level:** P1 - Critical  
 **Lead Investigator:** SOC Analyst (<Your Name>)  
 **Affected Asset:** CORP-WORKSTATION01 (192.168.XX.XX)  
@@ -439,18 +439,18 @@ Save this professional Incident Report in your project portfolio:
 ---
 
 ### 1. Executive Summary
-On October 6, 2026, the SOC SIEM detected a coordinated multi-stage cyber intrusion targeting workstation CORP-WORKSTATION01. The adversary initiated an external password spraying campaign from IP 185.220.101.5, successfully compromising the 'finance_svc' service account. The adversary subsequently executed an obfuscated PowerShell download cradle to retrieve a secondary binary, executed a disguised phishing attachment (Invoice_Q3.pdf.exe), and initiated an LSASS process memory dump (T1003.001) to harvest domain credentials. Outbound C2 network traffic was flagged by Suricata IDS. The SOC team responded within 4 minutes, isolating the host, disabling the compromised credentials, and blocking all adversary infrastructure within 48 minutes, preventing unauthorized lateral movement or data exfiltration.
+On October 9, 2026, the SOC SIEM detected a coordinated multi-stage cyber intrusion targeting workstation CORP-WORKSTATION01. The adversary initiated an external password spraying campaign from IP 185.220.101.5, successfully compromising the 'finance_svc' service account. The adversary subsequently executed an obfuscated PowerShell download cradle to retrieve a secondary binary, executed a disguised phishing attachment (Invoice_Q3.pdf.exe), and initiated an LSASS process memory dump (T1003.001) to harvest domain credentials. Outbound C2 network traffic was flagged by Suricata IDS. The SOC team responded within 4 minutes, isolating the host, disabling the compromised credentials, and blocking all adversary infrastructure within 48 minutes, preventing unauthorized lateral movement or data exfiltration.
 
 ---
 
 ### 2. Attack Narrative & Chronology
-1. **19:30:15 UTC:** Attacker initiated 24 failed login attempts (Event 4625) against 8 accounts.
-2. **19:33:15 UTC:** Successful logon (Event 4624) achieved for account 'finance_svc'.
-3. **19:35:00 UTC:** Weaponized attachment `Invoice_Q3.pdf.exe` executed, initiating discovery commands (`whoami`, `ipconfig`).
-4. **19:36:45 UTC:** PowerShell spawned in hidden mode, requesting external payload `http://185.220.101.5:8080/payload.exe`.
-5. **19:38:10 UTC:** `rundll32.exe` invoked `comsvcs.dll` to dump `lsass.exe` memory to disk.
-6. **19:39:20 UTC:** Suricata IDS generated high-severity alert for known C2 user-agent beaconing.
-7. **19:40:00 UTC – 20:15:00 UTC:** Containment, credential revocation, host quarantine, and firewall IP blacklisting completed.
+1. **22:59:00 IST:** Attacker initiated 24 failed login attempts (Event 4625) against 8 accounts.
+2. **23:01:15 IST:** Successful logon (Event 4624) achieved for account 'finance_svc'.
+3. **23:05:00 IST:** Weaponized attachment `Invoice_Q3.pdf.exe` executed, initiating discovery commands (`whoami`, `ipconfig`).
+4. **23:06:45 IST:** PowerShell spawned in hidden mode, requesting external payload `http://185.220.101.5:8080/payload.exe`.
+5. **23:08:10 IST:** `rundll32.exe` invoked `comsvcs.dll` to dump `lsass.exe` memory to disk.
+6. **23:09:20 IST:** Suricata IDS generated high-severity alert for known C2 user-agent beaconing.
+7. **22:59:00 IST – 23:45:00 IST:** Containment, credential revocation, host quarantine, and firewall IP blacklisting completed.
 
 ---
 
@@ -483,7 +483,7 @@ In Splunk, go to **Dashboards** $\rightarrow$ **Create New Dashboard** $\rightar
         <title>Suricata IDS Network Alerts</title>
         <search>
           <query>index=ids_suricata event_type=alert | stats count</query>
-          <earliest>-24h@h</earliest>
+          <earliest>-168h@h</earliest>
           <latest>now</latest>
         </search>
         <option name="colorMode">block</option>
@@ -497,7 +497,7 @@ In Splunk, go to **Dashboards** $\rightarrow$ **Create New Dashboard** $\rightar
         <title>AD Failed Logins (Event 4625)</title>
         <search>
           <query>index=wineventlog EventCode=4625 | stats count</query>
-          <earliest>-24h@h</earliest>
+          <earliest>-168h@h</earliest>
           <latest>now</latest>
         </search>
         <option name="colorMode">block</option>
@@ -511,7 +511,7 @@ In Splunk, go to **Dashboards** $\rightarrow$ **Create New Dashboard** $\rightar
         <title>Phishing &amp; Double Extensions</title>
         <search>
           <query>index=edr_sysmon (EventCode=1 OR EventCode=11) (Image="*.pdf.exe" OR TargetFilename="*.pdf.exe") | stats count</query>
-          <earliest>-24h@h</earliest>
+          <earliest>-168h@h</earliest>
           <latest>now</latest>
         </search>
         <option name="colorMode">block</option>
@@ -525,7 +525,7 @@ In Splunk, go to **Dashboards** $\rightarrow$ **Create New Dashboard** $\rightar
         <title>LSASS Credential Dumping Alerts</title>
         <search>
           <query>index=edr_sysmon EventCode=10 TargetImage="*\\lsass.exe" | stats count</query>
-          <earliest>-24h@h</earliest>
+          <earliest>-168h@h</earliest>
           <latest>now</latest>
         </search>
         <option name="colorMode">block</option>
@@ -539,7 +539,7 @@ In Splunk, go to **Dashboards** $\rightarrow$ **Create New Dashboard** $\rightar
         <title>PowerShell Download Cradles</title>
         <search>
           <query>index=edr_sysmon EventCode=1 (Image="*\\powershell.exe" OR Image="*\\pwsh.exe") | stats count</query>
-          <earliest>-24h@h</earliest>
+          <earliest>-168h@h</earliest>
           <latest>now</latest>
         </search>
         <option name="colorMode">block</option>
@@ -571,7 +571,7 @@ In Splunk, go to **Dashboards** $\rightarrow$ **Create New Dashboard** $\rightar
             | table _time, host, Stage, TargetUserName, Image, CommandLine, TargetFilename, "alert.signature", src_ip, dest_ip
             | sort - _time
           </query>
-          <earliest>-24h@h</earliest>
+          <earliest>-168h@h</earliest>
           <latest>now</latest>
         </search>
       </table>
