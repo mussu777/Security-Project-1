@@ -247,22 +247,31 @@ Incident **`INC0010004`** was escalated directly to Tier 2 Incident Response und
 ## 📁 Repository Structure
 
 ```
-├── 📄 README.md                               <-- Showcase portfolio & detection engineering guide
+📦 enterprise-soc-siem-lab/
+├── 📄 README.md                                <-- Main showcase portfolio page
+|
 ├── 📁 assets/
-│   └── 📁 screenshots/                        <-- Visual proof of attacks, SPL queries, and tickets
-│       ├── 📁 02_brute_force/
-│       ├── 📁 03_phishing/
-│       ├── 📁 04_powershell_cradle/
-│       ├── 📁 05_lsass_dump/
-│       ├── 📁 06_suricata_ids/
-│       ├── 📁 07_correlation_dashboard/
-│       └── 📁 08_servicenow/
-├── 📁 configs/
-│   ├── inputs.conf                            <-- Splunk Universal Forwarder configuration
-│   ├── sysmonconfig.xml                       <-- Modular Sysmon telemetry profile
-│   └── suricata.yaml                          <-- Suricata NIDS eve.json configuration
-└── 📁 docs/
-    └── INC0010004_Incident_Investigation_Report.md  <-- Formal Root Cause Analysis & IR Report
+│   ├── 📁 diagrams/                            <-- Network & Kill chain architecture diagrams
+│   └── 📁 screenshots/                         <-- All your lab pictures organized by stage
+│       ├── 📁 01_setup/                        <-- Splunk port 9997, Sysmon, Suricata config
+│       ├── 📁 02_brute_force/                  <-- PowerShell attack + Splunk Event 4625/4624
+│       ├── 📁 03_phishing/                     <-- PowerShell execution + Sysmon Event 1/11
+│       ├── 📁 04_powershell_cradle/            <-- PowerShell download + Sysmon Event 1
+│       ├── 📁 05_lsass_dump-and-suricata_ids/  <-- Rundll32 LSASS attack + Sysmon Event 10 + Suricata eve.json alert
+│       ├── 📁 06_correlation_dashboard/        <-- Splunk correlation search & dashboard views
+│       └── 📁 07_servicenow/                   <-- Incident ticket INC0010004 & SLA metrics
+|
+├── 📁 configs/                           <-- Actual config files used in the lab
+│   ├── inputs.conf
+│   ├── sysmonconfig.xml
+│   └── suricata.yaml
+├── 📁 detections/                        <-- Saved SPL detection searches (.spl files)
+│   ├── multi_stage_correlation.spl
+│   ├── brute_force_detection.spl
+│   └── lsass_dump_detection.spl
+└── 📁 docs/                              <-- In-depth incident reports & writeups
+    └── INC0010004_Incident_Investigation_Report.md
+
 ```
 
 ---
