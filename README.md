@@ -1,4 +1,4 @@
-# 🛡️ Enterprise SOC & Incident Response Lab: Multi-Stage Threat Detection & Triage
+# 🛡️ Enterprise SOC & Incident Response Lab: Multi-Stage Threat Detection & Triage with AI
 
 [![SIEM - Splunk Enterprise](https://img.shields.io/badge/SIEM-Splunk%20Enterprise%209.x-orange?style=for-the-badge&logo=splunk)](https://www.splunk.com/)
 [![EDR - Sysmon Modular](https://img.shields.io/badge/EDR%20Telemetry-Sysmon%20Modular-0078D4?style=for-the-badge&logo=windows)](https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon)
@@ -55,10 +55,10 @@ The objective was to simulate a multi-stage cyber intrusion against an enterpris
 
 ```mermaid
 flowchart LR
-    A["Initial Access<br><b>T1110.001</b> Password Spraying"] --> B["Execution<br><b>T1566.001</b> Phishing Attachment"]
-    B --> C["Execution & Evasion<br><b>T1059.001</b> PowerShell Cradle"]
-    C --> D["Command & Control<br><b>T1071.001</b> C2 Web Protocols"]
-    D --> E["Credential Access<br><b>T1003.001</b> LSASS Memory Dump"]
+    A["Initial Access<br><b>T1110</b> Password Spraying"] --> B["Execution<br><b>T1566</b> Phishing Attachment"]
+    B --> C["Execution & Evasion<br><b>T1059</b> PowerShell Cradle"]
+    C --> D["Command & Control<br><b>T1071</b> C2 Web Protocols"]
+    D --> E["Credential Access<br><b>T1003</b> LSASS Memory Dump"]
 ```
 
 ---
@@ -67,7 +67,7 @@ flowchart LR
 
 ---
 
-### 🔴 Phase 1: Password Spraying & Brute Force (`MITRE T1110.001`)
+### 🔴 Phase 1: Password Spraying & Brute Force (`MITRE T1110`)
 
 **Adversary Action:**  
 The adversary executed a multi-user password spray against common accounts. The spray succeeded in discovering valid credentials for the privileged `CORP\finance_svc` account.
@@ -98,7 +98,7 @@ index=wineventlog EventCode=4625
 
 ---
 
-### 🔴 Phase 2: Disguised Phishing Executable (`MITRE T1566.001`)
+### 🔴 Phase 2: Disguised Phishing Executable (`MITRE T1566`)
 
 **Adversary Action:**  
 A disguised payload (`Invoice_Q3.pdf.exe`) was dropped into `C:\Users\Public\Downloads` and executed, triggering process creation and initial reconnaissance commands (`whoami`, `ipconfig`).
@@ -123,7 +123,7 @@ index=edr_sysmon (EventCode=1 OR EventCode=11)
 
 ---
 
-### 🔴 Phase 3: Obfuscated PowerShell Download Cradle (`MITRE T1059.001`)
+### 🔴 Phase 3: Obfuscated PowerShell Download Cradle (`MITRE T1059`)
 
 **Adversary Action:**  
 The attacker launched a hidden, non-interactive PowerShell process bypassing execution policies to fetch secondary malware (`update.exe`) from external C2 infrastructure (`185.220.101.5:8080`).
@@ -146,7 +146,7 @@ index=edr_sysmon EventCode=1 Image="*\\powershell.exe"
 
 ---
 
-### 🔴 Phase 4: Suricata C2 Alert & LSASS Memory Dump (`MITRE T1071` & `T1003.001`)
+### 🔴 Phase 4: Suricata C2 Alert & LSASS Memory Dump (`MITRE T1071` & `T1003`)
 
 **Adversary Action:**  
 1. Outbound C2 beaconing using a known adversary profile (`CobaltStrike/4.5`).
@@ -226,7 +226,7 @@ The flagship correlation rule aggregates Windows Event Logs, Sysmon telemetry, a
 
 ## 🎫 Incident Response Lifecycle (ServiceNow ITSM)
 
-Incident **`INC0010942`** was escalated directly to Tier 2 Incident Response under **P1 - Critical** severity:
+Incident **`INC0010004`** was escalated directly to Tier 2 Incident Response under **P1 - Critical** severity:
 
 | ServiceNow P1 Incident Ticket | Resolution & SLA Performance |
 | :---: | :---: |
@@ -234,7 +234,7 @@ Incident **`INC0010942`** was escalated directly to Tier 2 Incident Response und
 
 ### SOC Response Timeline & Containment Actions:
 - **`[T+00:00]` Detection:** Splunk Multi-Stage Correlation Search triggers high-fidelity alert.
-- **`[T+00:04]` Triage:** Incident `INC0010942` logged in ServiceNow; assigned to SOC L2 Analyst (**Response SLA Met: 4 min / Target: < 15 min**).
+- **`[T+00:05]` Triage:** Incident `INC0010004` logged in ServiceNow; assigned to SOC L2 Analyst (**Response SLA Met: 5 min / Target: < 15 min**).
 - **`[T+00:10]` Threat Intel:** IP `185.220.101.5` confirmed malicious on AbuseIPDB; escalated to P1 Critical.
 - **`[T+00:22]` Containment:** Host `CORP-WORKSTATION01` isolated from network via EDR control.
 - **`[T+00:28]` Identity Revocation:** Account `CORP\finance_svc` disabled in AD; Kerberos ticket-granting tickets (TGT) revoked.
@@ -262,14 +262,14 @@ Incident **`INC0010942`** was escalated directly to Tier 2 Incident Response und
 │   ├── sysmonconfig.xml                       <-- Modular Sysmon telemetry profile
 │   └── suricata.yaml                          <-- Suricata NIDS eve.json configuration
 └── 📁 docs/
-    └── INC0010942_Incident_Investigation_Report.md  <-- Formal Root Cause Analysis & IR Report
+    └── INC0010004_Incident_Investigation_Report.md  <-- Formal Root Cause Analysis & IR Report
 ```
 
 ---
 
 ## 📖 In-Depth Documentation
 For the full post-incident root cause analysis, forensic evidence breakdown, and hardening recommendations, read the formal:  
-👉 **[INC0010942 Incident Investigation Report](docs/INC0010942_Incident_Investigation_Report.md)**
+👉 **[INC0010004 Incident Investigation Report](docs/INC0010004_Incident_Investigation_Report.md)**
 
 
 For the complete step-by-step instructions on setting up this lab environment, please refer to the detailed guide: 
