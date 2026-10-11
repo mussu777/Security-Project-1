@@ -71,22 +71,24 @@ Due to rapid detection and immediate endpoint network isolation, **no lateral mo
 ## 4. ⏱️ Detailed Chronological Incident Timeline
 
 ```mermaid
-timeline
-    title Incident INC0010004 Attack & Response Timeline (IST)
-    22:59:00 : Password spraying begins from 185.220.101.5 (24 Event 4625s)
-    23:01:15 : Successful authentication on CORP\\finance_svc (Event 4624)
-    23:05:00 : Disguised executable Invoice_Q3.pdf.exe dropped and executed
-    23:06:45 : PowerShell download cradle fetches update.exe from C2:8080
-    23:08:10 : Suricata triggers alert on CobaltStrike/4.5 User-Agent
-    23:09:20 : Rundll32 LSASS memory dump executed (lsass.dmp)
-    23:10:00 : Splunk Correlation Rule fires critical multi-stage alert
-    23:14:00 : Ticket INC0010004 opened in ServiceNow; assigned to SOC L2
-    23:32:00 : CONTAINMENT: Host CORP-WORKSTATION01 isolated via EDR
-    23:38:00 : CONTAINMENT: Account finance_svc disabled; Kerberos revoked
-    23:45:00 : ERADICATION: Malicious binaries and dumps quarantined & deleted
-    23:58:00 : RECOVERY: Perimeter firewall block pushed for 185.220.101.5/32
-    00:15:00 : CLOSURE: Post-incident forensic scan clean; Ticket marked Solved
+flowchart TD
+    A["22:59:00 IST<br/>Password spraying begins<br/>Source: 185.220.101.5<br/>24 Event ID 4625 failures"]
+    B["23:01:15 IST<br/>Successful authentication<br/>Account: CORP\finance_svc<br/>Event ID 4624"]
+    C["23:05:00 IST<br/>Invoice_Q3.pdf.exe dropped and executed"]
+    D["23:06:45 IST<br/>PowerShell downloads update.exe<br/>from C2 on port 8080"]
+    E["23:08:10 IST<br/>Suricata detects suspicious<br/>CobaltStrike/4.5 User-Agent"]
+    F["23:09:20 IST<br/>LSASS memory dump activity<br/>lsass.dmp"]
+    G["23:10:00 IST<br/>Splunk correlation rule triggers<br/>critical multi-stage alert"]
+    H["23:14:00 IST<br/>INC0010004 opened in ServiceNow<br/>Assigned to SOC L2"]
+    I["23:32:00 IST<br/>CONTAINMENT<br/>CORP-WORKSTATION01 isolated via EDR"]
+    J["23:38:00 IST<br/>CONTAINMENT<br/>finance_svc disabled"]
+    K["23:45:00 IST<br/>ERADICATION<br/>Malicious artifacts quarantined"]
+    L["23:58:00 IST<br/>RECOVERY<br/>Firewall block for 185.220.101.5/32"]
+    M["00:15:00 IST<br/>CLOSURE<br/>Forensic scan reported clean<br/>Ticket marked Solved"]
+
+    A --> B --> C --> D --> E --> F --> G --> H --> I --> J --> K --> L --> M
 ```
+
 
 | Timestamp (IST) | Source / Component | Event ID / Log Type | Event Description & Analyst Observations |
 | :--- | :--- | :--- | :--- |
