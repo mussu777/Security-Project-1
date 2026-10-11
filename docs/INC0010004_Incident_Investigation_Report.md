@@ -28,9 +28,9 @@ On **October 9, 2026**, between **22:59:00 IST and 23:58:00 IST**, the Enterpris
 The intrusion initiated with an external password spraying campaign originating from external IP `185.220.101.5`. The adversary successfully authenticated against the domain service account `CORP\finance_svc`. Following initial access, the adversary executed a double-extension disguised phishing payload (`Invoice_Q3.pdf.exe`), launched an obfuscated PowerShell download cradle to retrieve secondary malware, and initiated an **LSASS memory dump** (`lsass.dmp`) using `rundll32.exe` via `comsvcs.dll` to extract domain credential hashes. Outbound command-and-control (C2) beaconing was intercepted and alerted by Suricata Network IDS.
 
 The SOC responded rapidly, adhering to standard incident response playbooks:
-- **Mean Time to Detect (MTTD):** **4 minutes**
+- **Mean Time to Detect (MTTD):** **9 minutes**
 - **Mean Time to Acknowledge (MTTA):** **4 minutes** (SLA target: $< 15$ minutes)
-- **Mean Time to Contain (MTTC):** **22 minutes** (Host isolated, credentials revoked)
+- **Mean Time to Contain (MTTC):** **25 minutes** (Host isolated, credentials revoked)
 - **Mean Time to Resolve (MTTR):** **75 minutes** (SLA target: $< 120$ minutes)
 
 Due to rapid detection and immediate endpoint network isolation, **no lateral movement across the internal subnet occurred**, and no sensitive corporate data was exfiltrated. All adversary artifacts have been eradicated, and perimeter blocking rules are actively enforced.
