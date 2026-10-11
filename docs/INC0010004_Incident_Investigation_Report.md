@@ -23,7 +23,7 @@
 
 ## 1. 💼 Executive Summary
 
-On **October 9, 2026**, between **19:30 UTC and 20:45 UTC**, the Enterprise SOC SIEM (Splunk Enterprise) detected and triaged a coordinated, multi-stage cyber intrusion targeting workstation `CORP-WORKSTATION01`. 
+On **October 9, 2026**, between **22:59:00 IST and 23:58:00 IST**, the Enterprise SOC SIEM (Splunk Enterprise) detected and triaged a coordinated, multi-stage cyber intrusion targeting workstation `CORP-WORKSTATION01`. 
 
 The intrusion initiated with an external password spraying campaign originating from external IP `185.220.101.5`. The adversary successfully authenticated against the domain service account `CORP\finance_svc`. Following initial access, the adversary executed a double-extension disguised phishing payload (`Invoice_Q3.pdf.exe`), launched an obfuscated PowerShell download cradle to retrieve secondary malware, and initiated an **LSASS memory dump** (`lsass.dmp`) using `rundll32.exe` via `comsvcs.dll` to extract domain credential hashes. Outbound command-and-control (C2) beaconing was intercepted and alerted by Suricata Network IDS.
 
@@ -140,7 +140,7 @@ flowchart TD
 #### Evidence Item D: Suricata Alert JSON (`eve.json`)
 ```json
 {
-  "timestamp": "2026-10-06T19:38:10.124508+0000",
+  "timestamp": "2026-10-09T22:59:15.124508+0530",
   "flow_id": 1402938491823,
   "event_type": "alert",
   "src_ip": "192.168.158.135",
