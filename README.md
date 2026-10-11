@@ -163,11 +163,11 @@ rundll32.exe C:\Windows\System32\comsvcs.dll, MiniDump $lsassPid C:\Users\Public
 
 | Attack Simulation (PowerShell) | Splunk Detection (Search & Reporting) |
 | :---: | :---: |
-| ![LSASS Attack Script](assets/screenshots/05_lsass_dump/01_ps_lsass_dump.png) | ![Sysmon Event 10 LSASS Access](assets/screenshots/05_lsass_dump/4.png) |
+| ![LSASS Attack Script](assets/screenshots/05_lsass_dump-and-suricata_ids/01_ps_lsass_dump.png) | ![Sysmon Event 10 LSASS Access](assets/screenshots/05_lsass_dump-and-suricata_ids/4.png) |
 
 | Suricata C2 Trigger | Suricata NIDS Alert in Splunk (`eve.json`) |
 | :---: | :---: |
-| ![Suricata C2 Trigger](assets/screenshots/05_suricata_ids/01_suricata_trigger.png) | ![Splunk Suricata Alert](assets/screenshots/05_suricata_ids/1.png) |
+| ![Suricata C2 Trigger](assets/screenshots/05_lsass_dump-and-suricata_ids/01_suricata_trigger.png) | ![Splunk Suricata Alert](assets/screenshots/05_lsass_dump-and-suricata_ids/1.png) |
 
 **Detection SPL (LSASS Access):**
 ```spl
