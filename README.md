@@ -31,7 +31,7 @@ The objective was to simulate a multi-stage cyber intrusion against an enterpris
                   │
                   ▼ Automated Escalation
    [ServiceNow ITSM]
-   ├── P1 Critical Incident: INC0010942
+   ├── P1 Critical Incident: INC0010004
    ├── Containment (Host Isolation, Credential Revocation)
    └── Formal Post-Incident RCA & Lessons Learned
 ```
