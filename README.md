@@ -230,7 +230,7 @@ Incident **`INC0010004`** was escalated directly to Tier 2 Incident Response und
 
 | ServiceNow P1 Incident Ticket | Resolution & SLA Performance |
 | :---: | :---: |
-| ![ServiceNow Ticket P1](assets/screenshots/08_servicenow/01_servicenow_ticket_p1.png) | ![ServiceNow SLA Resolved](assets/screenshots/08_servicenow/02_servicenow_sla_resolved.png) |
+| ![ServiceNow Ticket P1](assets/screenshots/07_servicenow/2.png) | ![ServiceNow SLA Resolved](assets/screenshots/07_servicenow/5.png) |
 
 ### SOC Response Timeline & Containment Actions:
 - **`[T+00:00]` Detection:** Splunk Multi-Stage Correlation Search triggers high-fidelity alert.
