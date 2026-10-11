@@ -167,7 +167,7 @@ rundll32.exe C:\Windows\System32\comsvcs.dll, MiniDump $lsassPid C:\Users\Public
 
 | Suricata C2 Trigger | Suricata NIDS Alert in Splunk (`eve.json`) |
 | :---: | :---: |
-| ![Suricata C2 Trigger](assets/screenshots/06_suricata_ids/01_suricata_trigger.png) | ![Splunk Suricata Alert](assets/screenshots/05_suricata_ids/1.png) |
+| ![Suricata C2 Trigger](assets/screenshots/05_suricata_ids/01_suricata_trigger.png) | ![Splunk Suricata Alert](assets/screenshots/05_suricata_ids/1.png) |
 
 **Detection SPL (LSASS Access):**
 ```spl
